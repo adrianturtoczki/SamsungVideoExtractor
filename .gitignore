@@ -91,3 +91,5 @@ ENV/
 .ropeproject
 *.jpg
 *.bak
+setup.py
+*.mp4
