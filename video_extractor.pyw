@@ -22,7 +22,7 @@ def load_folder():
         if i.endswith("jpg"):
             extractor(i)
 single = Button(text='single', command=load_file,width=30).pack()
-batch = Button(text='batch', command=load_folder,width=30).pack()
+batch = Button(text='folder', command=load_folder,width=30).pack()
 def extractor(file_name):
     pic_name = file_name+"_pic"+".jpg"
     vid_name = file_name+"_vid"+".mp4"
