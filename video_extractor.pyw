@@ -5,13 +5,13 @@ import tkinter as tk
 from tkinter import filedialog, Button
 
 root = tk.Tk()
-root.title("Splitter")
+root.title("Extractor")
 def load_file():
     file_name = filedialog.askopenfilename(parent=root,filetypes=[("Images","*.jpg")],title="Choose a file to split")
     if file_name == "":
         exit()
     print(file_name)
-    splitter(file_name)
+    extractor(file_name)
 def load_folder():
     directory = filedialog.askdirectory(initialdir='.')
     if directory == "":
@@ -20,10 +20,10 @@ def load_folder():
     for i in listdir():
         print(i)
         if i.endswith("jpg"):
-            splitter(i)
+            extractor(i)
 single = Button(text='single', command=load_file,width=30).pack()
 batch = Button(text='batch', command=load_folder,width=30).pack()
-def splitter(file_name):
+def extractor(file_name):
     pic_name = file_name+"_pic"+".jpg"
     vid_name = file_name+"_vid"+".mp4"
     try:
@@ -39,7 +39,7 @@ def splitter(file_name):
             f.write(vid_data)
         with open(pic_name,"w+b") as f:
             f.write(pic_data)  
-        print("Splitting succesful.")
+        print("Extracting succesful.")
     except:
-        print("Splitting not succesful. on file %s."%file_name)
+        print("Extracting not succesful. On file %s."%file_name)
 root.mainloop()
