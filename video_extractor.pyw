@@ -1,26 +1,36 @@
 import re
 import sys
 from os import listdir
-from tkinter import Tk, filedialog, Button, IntVar, Checkbutton
+import os.path
+from tkinter import Tk, Button, IntVar, Checkbutton, filedialog
 from tkinter.ttk import Progressbar
 
 root = Tk()
 root.title("Extractor")
+
+def save_to_folder():
+    save_to = filedialog.askdirectory(initialdir='.')
+    print(save_to)
+    if save_to == "":
+        exit()
+    return save_to
 def load_file():
     file_name = filedialog.askopenfilename(parent=root,filetypes=[("Images","*.jpg")],title="Choose a file to split")
     if file_name == "":
         exit()
+    save_to = save_to_folder()
     print(file_name)
-    extractor(file_name,vid_in,img_in)
+    extractor(file_name,vid_in,img_in,save_to)
 def load_folder():
     directory = filedialog.askdirectory(initialdir='.')
     if directory == "":
         exit()
     print(directory)
+    save_to = save_to_folder()
     for i in listdir():
         print(i)
         if i.endswith("jpg"):
-            extractor(i,vid_in,img_in)
+            extractor(i,vid_in,img_in,save_to)
 
 single = Button(text='single', command=load_file,width=30).pack()
 batch = Button(text='folder', command=load_folder,width=30).pack()
@@ -30,7 +40,8 @@ img_in = IntVar()
 img_in.set(1)
 ch = Checkbutton(root, text='video', variable=vid_in).pack()
 ch = Checkbutton(root, text='image', variable=img_in).pack()
-def extractor(file_name,vid_in,img_in):
+def extractor(file_name,vid_in,img_in,save_to):
+    file_name = os.path.basename(file_name)
     pic_name = file_name+"_pic"+".jpg"
     vid_name = file_name+"_vid"+".mp4"
     try:
@@ -41,12 +52,11 @@ def extractor(file_name,vid_in,img_in):
             vid_data = f.read()
             f.seek(0)
             pic_data = f.read(place.start())
-        #save_to = filedialog.asksaveasfilename(initialdir = "/",title = "Select file",filetypes = (("jpg","*.jpg"),("mp4","*.mp4"),("all files","*.*")))
         if vid_in.get() == 1:
-            with open(vid_name,"w+b") as f:
+            with open(os.path.join(save_to, vid_name),"w+b") as f:
                 f.write(vid_data)
         if img_in.get() == 1:
-            with open(pic_name,"w+b") as f:
+            with open(os.path.join(save_to, pic_name),"w+b") as f:
                 f.write(pic_data)  
         print("Extracting succesful.")
     except:
