@@ -1,17 +1,17 @@
 import re
 import sys
 from os import listdir
-import tkinter as tk
-from tkinter import filedialog, Button
+from tkinter import Tk, filedialog, Button, IntVar, Checkbutton
+from tkinter.ttk import Progressbar
 
-root = tk.Tk()
+root = Tk()
 root.title("Extractor")
 def load_file():
     file_name = filedialog.askopenfilename(parent=root,filetypes=[("Images","*.jpg")],title="Choose a file to split")
     if file_name == "":
         exit()
     print(file_name)
-    extractor(file_name)
+    extractor(file_name,vid_in,img_in)
 def load_folder():
     directory = filedialog.askdirectory(initialdir='.')
     if directory == "":
@@ -20,10 +20,17 @@ def load_folder():
     for i in listdir():
         print(i)
         if i.endswith("jpg"):
-            extractor(i)
+            extractor(i,vid_in,img_in)
+
 single = Button(text='single', command=load_file,width=30).pack()
 batch = Button(text='folder', command=load_folder,width=30).pack()
-def extractor(file_name):
+vid_in = IntVar()
+vid_in.set(1)
+img_in = IntVar()
+img_in.set(1)
+ch = Checkbutton(root, text='video', variable=vid_in).pack()
+ch = Checkbutton(root, text='image', variable=img_in).pack()
+def extractor(file_name,vid_in,img_in):
     pic_name = file_name+"_pic"+".jpg"
     vid_name = file_name+"_vid"+".mp4"
     try:
@@ -35,10 +42,12 @@ def extractor(file_name):
             f.seek(0)
             pic_data = f.read(place.start())
         #save_to = filedialog.asksaveasfilename(initialdir = "/",title = "Select file",filetypes = (("jpg","*.jpg"),("mp4","*.mp4"),("all files","*.*")))
-        with open(vid_name,"w+b") as f:
-            f.write(vid_data)
-        with open(pic_name,"w+b") as f:
-            f.write(pic_data)  
+        if vid_in.get() == 1:
+            with open(vid_name,"w+b") as f:
+                f.write(vid_data)
+        if img_in.get() == 1:
+            with open(pic_name,"w+b") as f:
+                f.write(pic_data)  
         print("Extracting succesful.")
     except:
         print("Extracting not succesful. On file %s."%file_name)
