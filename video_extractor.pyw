@@ -61,6 +61,9 @@ def extractor(file_name,vid_in,img_in,save_to):
         print("Extracting succesful in %s."%save_folder)
     except Exception as e:
         print("Extracting not succesful. On file %s. Error: %s"%(file_name,e))
-    os.system('exiftool "-FileCreateDate<CreateDate" '+save_folder)
+    try:
+        os.system('exiftool "-FileCreateDate<CreateDate" '+save_folder)
+    except e as Exception:
+        print(Exception)
         
 root.mainloop()
