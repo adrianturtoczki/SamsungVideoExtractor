@@ -10,7 +10,6 @@ root.title("Extractor")
 
 def save_to_folder():
     save_to = filedialog.askdirectory(initialdir='.')
-    print(save_to)
     if save_to == "":
         exit()
     return save_to
@@ -19,13 +18,11 @@ def load_file():
     if file_name == "":
         exit()
     save_to = save_to_folder()
-    print(file_name)
     extractor(file_name,vid_in,img_in,save_to)
 def load_folder():
     directory = filedialog.askdirectory(initialdir='.')
     if directory == "":
         exit()
-    print(directory)
     save_to = save_to_folder()
     for i in listdir():
         print(i)
@@ -37,7 +34,7 @@ batch = Button(text='folder', command=load_folder,width=30).pack()
 vid_in = IntVar()
 vid_in.set(1)
 img_in = IntVar()
-img_in.set(1)
+img_in.set(0)
 ch = Checkbutton(root, text='video', variable=vid_in).pack()
 ch = Checkbutton(root, text='image', variable=img_in).pack()
 def extractor(file_name,vid_in,img_in,save_to):
@@ -52,13 +49,18 @@ def extractor(file_name,vid_in,img_in,save_to):
             vid_data = f.read()
             f.seek(0)
             pic_data = f.read(place.start())
+        save_folder = save_to+"/VideoExtractor"
+        if not os.path.exists(save_folder): #Create folder
+            os.makedirs("VideoExtractor")
         if vid_in.get() == 1:
-            with open(os.path.join(save_to, vid_name),"w+b") as f:
+            with open(os.path.join(save_folder, vid_name),"w+b") as f:
                 f.write(vid_data)
         if img_in.get() == 1:
-            with open(os.path.join(save_to, pic_name),"w+b") as f:
-                f.write(pic_data)  
-        print("Extracting succesful.")
-    except:
-        print("Extracting not succesful. On file %s."%file_name)
+            with open(os.path.join(save_folder, pic_name),"w+b") as f:
+                f.write(pic_data)
+        print("Extracting succesful in %s."%save_folder)
+    except Exception as e:
+        print("Extracting not succesful. On file %s. Error: %s"%(file_name,e))
+    os.system('exiftool "-FileCreateDate<CreateDate" '+save_folder)
+        
 root.mainloop()

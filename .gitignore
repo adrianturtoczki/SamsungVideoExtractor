@@ -93,3 +93,6 @@ ENV/
 *.bak
 setup.py
 *.mp4
+exifchangertest.cmd
+exifchanger.cmd
+exiftool.exe
