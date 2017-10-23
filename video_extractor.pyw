@@ -43,6 +43,7 @@ def extractor(file_name,vid_in,img_in,save_to):
     vid_name = file_name+"_vid"+".mp4"
     try:
         with open(file_name,"r+b") as f:
+            """finds the divide in the binary code between the video and image part"""
             data = f.read()
             place = re.search(b"\x4D\x6F\x74\x69\x6F\x6E\x50\x68\x6F\x74\x6F\x5F\x44\x61\x74\x61",data)
             f.seek(place.start()+16)
